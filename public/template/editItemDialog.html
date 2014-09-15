@@ -1,0 +1,12 @@
+<div class="modal-header">
+	<div>
+		<input ng-model="editingTodo.title" type="text" class="form-control" style="width: 100%;">
+	</div>
+</div>
+<div class="modal-body">
+	<textarea ng-model="editingTodo.description" class="form-control" style="width: 100%; height: 200px"></textarea>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
+	<button type="button" class="btn btn-primary" ng-click="save()">Save changes</button>
+</div>

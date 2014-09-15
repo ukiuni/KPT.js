@@ -1,0 +1,44 @@
+<html>
+<head style="height:100%">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+</head>
+<body style="background-color: #F0F0F0; height: 100%">
+	<div class="jumbotron" style="margin: 0">
+		<h1>KPT</h1>
+		<p>Simple KPT</p>
+		<p>
+			<a class="btn btn-primary btn-lg" role="button">Learn more</a>
+		</p>
+	</div>
+	<div class="row" style="background-color: white; padding: 20px; padding-top: 30px">
+		<div class="col-lg-offset-3 col-lg-6 col-xs-10 col-xs-offset-1">
+			<div class="input-group">
+				<input type="text" id="projectNameInput" class="form-control" placeholder="Enter Project Name"> <span class="input-group-btn">
+					<button class="btn btn-primary" type="button" onclick="send()">Create New Project</button>
+				</span>
+			</div>
+			<b>** never forget next pages URL. It's your only SECRET URL. **</b>
+		</div>
+	</div>
+	<script type="text/javascript">
+		function send() {
+			var projectName = document.getElementById("projectNameInput").value;
+			if ("" == projectName) {
+				return;
+			}
+			$.post("api/todo/createProject", {
+				"projectName" : projectName
+			}).success(function(project) {
+				document.location.href = "./kpt.html?project_key=" + project.projectKey;
+				document.getElementById("messageArea").value = "";
+			}).error(function() {
+			})
+		}
+	</script>
+</body>
+</html>
+

@@ -1,0 +1,86 @@
+.list {
+	list-style: none outside none;
+	margin: 10px 0 30px;
+}
+
+.items-container {
+	padding: 5px;
+	min-height: 100px;
+}
+
+.item {
+	padding: 5px 10px;
+	margin: 5px 0;
+	border: 2px solid #CCC;
+	color: #666;
+	border-radius: 5px;
+	background-color: white;
+	text-align: left;
+	border-radius: 5px;
+	white-space: pre;
+}
+
+/***  Extra ***/
+body {
+	font-family: Verdana, 'Trebuchet ms', Tahoma;
+}
+
+.logList {
+	margin-top: 20px;
+	width: 250px;
+	min-height: 300px;
+	padding: 5px 15px;
+	border: 5px solid #000;
+	border-radius: 15px;
+}
+
+.logItem {
+	margin-bottom: 10px;
+}
+
+.logList:before {
+	content: 'log';
+	padding: 0 5px;
+	position: relative;
+	top: -1.1em;
+	background-color: #FFF;
+}
+
+.container {
+	width: 750px;
+	margin: auto;
+}
+
+h2 {
+	text-align: center;
+}
+
+.floatleft {
+	float: left;
+}
+
+.floatright {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+.toolSign {
+	font-size: 30px;
+	color: #666;
+	margin-bottom: 10px;
+}
+
+p {
+	margin: 0;
+}
+
+.my-element.ng-hide-add, .my-element.ng-hide-remove {
+	transition: 0.5s linear all;
+}
+
+.my-element.ng-hide-add-active, .my-element.ng-hide-remove-active {
+	transition: 0.5s linear all;
+}
