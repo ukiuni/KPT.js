@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var bodyParser = require('body-parser');
 var db = require('./models');
 var projectController = require('./routes/projects');
 global.UUID = require('node-uuid');
@@ -8,10 +9,14 @@ global.UUID = require('node-uuid');
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+	extended : false
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routing
-//app.get('/projects', projectController.create);
+// app.get('/projects', projectController.create);
 app.use('/projects', projectController);
 
 db.sequelize.sync().complete(function(err) {
@@ -24,5 +29,5 @@ db.sequelize.sync().complete(function(err) {
 	}
 });
 global.UUID.create = function() {
-    return UUID.v4().split('-').join('');
+	return UUID.v4().split('-').join('');
 }

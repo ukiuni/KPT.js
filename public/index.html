@@ -30,10 +30,10 @@
 			if ("" == projectName) {
 				return;
 			}
-			$.post("api/todo/createProject", {
-				"projectName" : projectName
+			$.post("projects", {
+				"name" : projectName
 			}).success(function(project) {
-				document.location.href = "./kpt.html?project_key=" + project.projectKey;
+				document.location.href = "./kpt.html?project_key=" + project.key;
 				document.getElementById("messageArea").value = "";
 			}).error(function() {
 			})
