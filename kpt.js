@@ -4,6 +4,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var db = require('./models');
 var projectController = require('./routes/projects');
+var itemsController = require('./routes/items');
 global.UUID = require('node-uuid');
 
 var app = express();
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // routing
 // app.get('/projects', projectController.create);
 app.use('/projects', projectController);
+app.use('/items', itemsController);
 
 db.sequelize.sync().complete(function(err) {
 	if (err) {

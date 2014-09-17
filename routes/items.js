@@ -6,8 +6,9 @@ var router = express.Router();
 router.post('/', function(req, res) {
 	Item.create({
 		projectKey : req.query.projectKey,
-		name : req.query.name,
-		key : global.UUID.create()
+		key : global.UUID.create(),
+		status : 0,
+		index : 0
 	}).success(function(project) {
 		res.json(project);
 	}).error(function(error) {

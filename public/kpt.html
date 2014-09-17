@@ -48,7 +48,7 @@
 		<div class="row">
 			<div class="col-xs-1" align="left">
 				<button class="btn btn-default glyphicon glyphicon-plus"
-					style="height: 30px; margin-top: 10px" ng-click="addItem(0)"></button>
+					style="height: 30px; margin-top: 10px" ng-click="createItem(0)"></button>
 			</div>
 			<div class="col-xs-3 toolSign" align="center" ng-click="dump()">Keep</div>
 			<div class="col-xs-4 toolSign" align="center">Problem</div>
@@ -87,14 +87,13 @@
 				},
 				distance : 10
 			};
-			$scope.addItem = function(index) {
-				var newTodo = {
-					title : "",
-					description : ""
-				};
-				$scope.todos[index].push(newTodo);
-				console.log("addItem = " + JSON.stringify($scope.todos));
-				$scope.edit(newTodo);
+			$scope.createItem = function() {
+				$http.post("items").success(function(item) {
+					$scope.todos[0].push(item);
+					$scope.edit(item);
+				}).error(function() {
+					$scope.error = "Load error";
+				});
 			}
 			$scope.edit = function(app, $event) {
 				$scope.editingTodo = {
@@ -143,8 +142,7 @@
 			if (!$scope.projectKey) {
 				$scope.error = "project not defined";
 			}
-			$http.get('project?project_key=' + $scope.projectKey).success(function(project, status, headers, config) {
-				console.log("getTodo = " + JSON.stringify(project));
+			$http.get('projects?key=' + $scope.projectKey).success(function(project, status, headers, config) {
 				$scope.todos = project.todos;
 				$scope.projectName = project.projectName;
 			}).error(function(data, status, headers, config) {
@@ -161,9 +159,10 @@
 				});
 			}
 			$scope.saveTodo = myController.saveTodo;
-			$scope.$watch(function() {
-				return $scope.todos;
-			}, $scope.saveTodo);
+			if (false)
+				$scope.$watch(function() {
+					return $scope.todos;
+				}, $scope.saveTodo);
 			$scope.dump = function() {
 				console.log("dump = " + JSON.stringify($scope.todos));
 			}

@@ -1,14 +1,25 @@
 var Project = global.db.Project;
+var Item = global.db.Item;
 
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function() {
+router.get('/', function(req, res) {
 	var projectKey = req.param('key');
 	Project.find({
-		where : [ 'key=', projectKey ]
+		where : [ 'key = ?', projectKey ]
 	}).success(function(project) {
-		res.json(project);
+		Item.findAll({
+			where : [ 'projectKey = ?', projectKey ],
+			order : 'createdAt DESC'
+		}).success(function(items) {
+			res.json({
+				project : project,
+				items : items
+			});
+		}).error(function(error) {
+			res.status(500).json(error);
+		});
 	}).error(function(error) {
 		res.status(500).json(error);
 	});
