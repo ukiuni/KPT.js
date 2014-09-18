@@ -61,9 +61,9 @@
 		<div class="row">
 			<div ui-sortable="sortableOptions"
 				class="items-container screen col-xs-4" ng-model="screen"
-				ng-repeat="screen in todos">
-				<div class="item" ng-repeat="app in screen" strip-br="true"
-					ng-click="edit(app, $event)" btf-markdown="app.title"></div>
+				ng-repeat="items in todos">
+				<div class="item" ng-repeat="item in items" strip-br="true"
+					ng-click="edit(item, $event)" btf-markdown="item.title"></div>
 			</div>
 		</div>
 	</div>
@@ -75,30 +75,42 @@
 			$httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 		} ]);
 		var myController = [ "$scope", "$dialogs", "$modal", "$location", "$http", function($scope, $dialogs, $modal, $location, $http) {
-			$scope.todos = [ [], [], [] ]
 			$scope.sortingLog = [];
 
 			$scope.sortableOptions = {
 				placeholder : "item",
 				connectWith : ".items-container",
 				update : function(e, ui) {
-					console.log("update = " + JSON.stringify($scope.todos));
-					$scope.saveTodo();
+					console.log("update   = " + (ui.item.sortable.dropindex));
+					console.log("update== = " + ui.item.parent().innerHTML);
+					
+					//$scope.saveTodo();
 				},
 				distance : 10
 			};
 			$scope.createItem = function() {
-				$http.post("items").success(function(item) {
+				$http({
+					url : 'items',
+					method : "POST",
+					data : JSON.stringify({
+						projectKey : $scope.projectKey
+					}),
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).success(function(item, status, headers, config) {
+					item.title = "";
+					item.description = "";
 					$scope.todos[0].push(item);
 					$scope.edit(item);
-				}).error(function() {
+				}).error(function(data, status, headers, config) {
 					$scope.error = "Load error";
 				});
 			}
-			$scope.edit = function(app, $event) {
+			$scope.edit = function(item, $event) {
 				$scope.editingTodo = {
-					title : app.title + "",
-					description : app.description + ""
+					title : item.title + "",
+					description : item.description + ""
 				};
 				var dialogController = [ "$scope", "$modalInstance", "editingTodo", function($scope, $modalInstance, editingTodo) {
 					$scope.editingTodo = editingTodo;
@@ -116,10 +128,10 @@
 						}
 					}
 				});
-				modalInstance.result.then(function(editingTodo) {
-					app.title = editingTodo.title;
-					app.description = editingTodo.description;
-					$scope.saveTodo();
+				modalInstance.result.then(function(editItem) {
+					item.title = editItem.title;
+					item.description = editItem.description;
+					$scope.saveItem(item);
 				}, function() {
 					console.log('Modal dismissed at: ' + new Date());
 				});
@@ -143,12 +155,38 @@
 				$scope.error = "project not defined";
 			}
 			$http.get('projects?key=' + $scope.projectKey).success(function(project, status, headers, config) {
-				$scope.todos = project.todos;
+				console.log("project loaded = " + JSON.stringify(project));
+				//$scope.todos = project.items;
 				$scope.projectName = project.projectName;
+				$scope.todos = [ [], [], [] ];
+				for(var i in project.items){
+					var item = project.items[i];
+					$scope.todos[item.status].push(item);
+				}
 			}).error(function(data, status, headers, config) {
 				$scope.error = "Load error";
 			});
+			$scope.saveItem = function(item) {
+				$http({
+					url : 'items',
+					method : "PUT",
+					data : JSON.stringify(item),
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).success(function(data, status, headers, config) {
+					console.log("saved");
+				}).error(function(data, status, headers, config) {
+					$scope.error = "Load error";
+				});
 
+				if (false)
+					$http.put("items", item).success(function() {
+						console.log("saved");
+					}).error(function() {
+						$scope.error = "Load error";
+					});
+			}
 			myController.saveTodo = function() {
 				console.log("____saveTodo = " + JSON.stringify($scope.todos));
 				$http.put('api/todo', {
