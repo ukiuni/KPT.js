@@ -55,15 +55,17 @@
 			<div class="col-xs-3 toolSign" align="center">Try</div>
 			<div class="col-xs-1" align="right">
 				<button class="btn btn-default glyphicon glyphicon-log-out"
-					style="height: 30px; margin-top: 10px" ng-click="deleteDone()"></button>
+					style="height: 30px; margin-top: 10px" ng-click="deleteDone()"
+					id="key//..dfa.sd.f.as"></button>
 			</div>
 		</div>
 		<div class="row">
 			<div ui-sortable="sortableOptions"
-				class="items-container screen col-xs-4" ng-model="screen"
+				class="items-container items col-xs-4" ng-model="items"
 				ng-repeat="items in todos">
-				<div class="item" ng-repeat="item in items" strip-br="true"
-					ng-click="edit(item, $event)" btf-markdown="item.title"></div>
+				<div key="{{item.key}}" class="item" ng-repeat="item in items"
+					strip-br="true" ng-click="edit(item, $event)"
+					btf-markdown="item.title"></div>
 			</div>
 		</div>
 	</div>
@@ -76,15 +78,38 @@
 		} ]);
 		var myController = [ "$scope", "$dialogs", "$modal", "$location", "$http", function($scope, $dialogs, $modal, $location, $http) {
 			$scope.sortingLog = [];
-
 			$scope.sortableOptions = {
 				placeholder : "item",
 				connectWith : ".items-container",
 				update : function(e, ui) {
-					console.log("update   = " + (ui.item.sortable.dropindex));
-					console.log("update== = " + ui.item.parent().innerHTML);
-					
-					//$scope.saveTodo();
+					setTimeout(function() {
+						var movedItemKey = ui.item.attr("key");
+						for ( var i in $scope.todos) {
+							var items = $scope.todos[i];
+							for ( var j in items) {
+								var item = items[j];
+								if (item.key == movedItemKey) {
+									var status = i;
+									var index = j;
+									break;
+								}
+								if (status) {
+									break;
+								}
+							}
+						}
+						var changeItems = [];
+						for ( var i in $scope.todos[status]) {
+							var item = $scope.todos[status][i];
+							var changeItem = {};
+							changeItem.key = item.key;
+							changeItem.title = item.title;
+							changeItem.status = status;
+							changeItem.index = i;
+							changeItems.push(changeItem);
+						}
+						$scope.saveSortedItems(changeItems);
+					}, 0);
 				},
 				distance : 10
 			};
@@ -115,7 +140,6 @@
 				var dialogController = [ "$scope", "$modalInstance", "editingTodo", function($scope, $modalInstance, editingTodo) {
 					$scope.editingTodo = editingTodo;
 					$scope.save = function() {
-						console.log("save = " + $scope.editingTodo);
 						$modalInstance.close($scope.editingTodo);
 					};
 				} ];
@@ -139,6 +163,20 @@
 					$event.stopPropagation();
 				}
 			}
+			$scope.saveSortedItems = function(items) {
+				console.log("asdfasdf = " + JSON.stringify(items));
+				$http({
+					url : 'items/sort',
+					method : "put",
+					data : JSON.stringify(items),
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).success(function(item, status, headers, config) {
+				}).error(function(data, status, headers, config) {
+					$scope.error = "Load error";
+				});
+			}
 
 			$scope.logModels = function() {
 				$scope.sortingLog = [];
@@ -155,11 +193,9 @@
 				$scope.error = "project not defined";
 			}
 			$http.get('projects?key=' + $scope.projectKey).success(function(project, status, headers, config) {
-				console.log("project loaded = " + JSON.stringify(project));
-				//$scope.todos = project.items;
 				$scope.projectName = project.projectName;
 				$scope.todos = [ [], [], [] ];
-				for(var i in project.items){
+				for ( var i in project.items) {
 					var item = project.items[i];
 					$scope.todos[item.status].push(item);
 				}
@@ -187,7 +223,7 @@
 						$scope.error = "Load error";
 					});
 			}
-			myController.saveTodo = function() {
+			$scope.saveTodo = function() {
 				console.log("____saveTodo = " + JSON.stringify($scope.todos));
 				$http.put('api/todo', {
 					projectKey : $scope.projectKey,
@@ -196,11 +232,7 @@
 					$scope.error = "Save error";
 				});
 			}
-			$scope.saveTodo = myController.saveTodo;
-			if (false)
-				$scope.$watch(function() {
-					return $scope.todos;
-				}, $scope.saveTodo);
+			
 			$scope.dump = function() {
 				console.log("dump = " + JSON.stringify($scope.todos));
 			}

@@ -11,13 +11,14 @@ router.get('/', function(req, res) {
 	}).success(function(project) {
 		Item.findAll({
 			where : [ 'projectKey = ?', projectKey ],
-			order : 'createdAt DESC'
+			order : [ 'index', 'status']
 		}).success(function(items) {
 			res.json({
 				project : project,
 				items : items
 			});
 		}).error(function(error) {
+			console.log(error)
 			res.status(500).json(error);
 		});
 	}).error(function(error) {

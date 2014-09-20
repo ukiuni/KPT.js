@@ -4,7 +4,6 @@ var express = require('express');
 var router = express.Router();
 
 router.post('/', function(req, res) {
-	console.log("######## asdfasfd = " + req.body.projectKey);
 	Item.create({
 		projectKey : req.body.projectKey,
 		key : global.UUID.create(),
@@ -17,7 +16,7 @@ router.post('/', function(req, res) {
 	});
 });
 router.put('/', function(req, res) {
-	requestItem = req.body;
+	var requestItem = req.body;
 	Item.find({
 		where : {
 			key : requestItem.key
@@ -37,6 +36,22 @@ router.put('/', function(req, res) {
 			res.json(error);
 		});
 	})
+});
+router.put('/sort', function(req, res) {
+	var sortItems = req.body;
+	for ( var i in sortItems) {
+		var sortItem = sortItems[i];
+		if (sortItem.key) {
+			Item.update(sortItem, {
+				key : sortItem.key
+			}).success(function() {
+			}).error(function() {
+			});
+		}
+	}
+	res.json({
+		message : "accepted"
+	});
 });
 
 module.exports = router;
