@@ -8,7 +8,7 @@ router.post('/', function(req, res) {
 		projectKey : req.body.projectKey,
 		key : global.UUID.create(),
 		status : 0,
-		index : 0
+		index : parseInt(req.body.index)
 	}).success(function(project) {
 		res.json(project);
 	}).error(function(error) {

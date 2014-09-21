@@ -53,8 +53,7 @@
 			<div class="col-xs-3 toolSign" align="center" ng-click="dump()">Keep</div>
 			<div class="col-xs-4 toolSign" align="center">Problem</div>
 			<div class="col-xs-3 toolSign" align="center">Try</div>
-			<div class="col-xs-1" align="right">
-			</div>
+			<div class="col-xs-1" align="right"></div>
 		</div>
 		<div class="row">
 			<div ui-sortable="sortableOptions"
@@ -73,7 +72,7 @@
 			$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 			$httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 		} ]);
-		var myController = [ "$scope", "$dialogs", "$modal", "$location", "$http", function($scope, $dialogs, $modal, $location, $http) {
+		var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", "$http", function($rootScope, $scope, $dialogs, $modal, $location, $http) {
 			$scope.sortingLog = [];
 			$scope.sortableOptions = {
 				placeholder : "item",
@@ -115,7 +114,8 @@
 					url : 'items',
 					method : "POST",
 					data : JSON.stringify({
-						projectKey : $scope.projectKey
+						projectKey : $scope.projectKey,
+						index : $scope.todos[0].length
 					}),
 					headers : {
 						'Content-Type' : 'application/json'
@@ -202,7 +202,7 @@
 				$scope.error = "project not defined";
 			}
 			$http.get('projects?key=' + $scope.projectKey).success(function(project, status, headers, config) {
-				$scope.projectName = project.projectName;
+				$rootScope.projectName = project.project.name;
 				$scope.todos = [ [], [], [] ];
 				for ( var i in project.items) {
 					var item = project.items[i];
