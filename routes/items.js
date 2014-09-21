@@ -53,5 +53,22 @@ router.put('/sort', function(req, res) {
 		message : "accepted"
 	});
 });
+router.delete('/', function(req, res) {
+	Item.find({
+		where : {
+			key : req.body.key
+		}
+	}).success(function(item) {
+		if (null == item) {
+			res.json(error);
+			return;
+		}
+		item.destroy().success(function() {
+			res.json({
+				message : "accepted"
+			});
+		});
+	});
+});
 
 module.exports = router;

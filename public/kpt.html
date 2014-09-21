@@ -54,9 +54,6 @@
 			<div class="col-xs-4 toolSign" align="center">Problem</div>
 			<div class="col-xs-3 toolSign" align="center">Try</div>
 			<div class="col-xs-1" align="right">
-				<button class="btn btn-default glyphicon glyphicon-log-out"
-					style="height: 30px; margin-top: 10px" ng-click="deleteDone()"
-					id="key//..dfa.sd.f.as"></button>
 			</div>
 		</div>
 		<div class="row">
@@ -93,9 +90,9 @@
 									var index = j;
 									break;
 								}
-								if (status) {
-									break;
-								}
+							}
+							if (status) {
+								break;
 							}
 						}
 						var changeItems = [];
@@ -140,7 +137,16 @@
 				var dialogController = [ "$scope", "$modalInstance", "editingTodo", function($scope, $modalInstance, editingTodo) {
 					$scope.editingTodo = editingTodo;
 					$scope.save = function() {
-						$modalInstance.close($scope.editingTodo);
+						$modalInstance.close({
+							func : "update",
+							item : $scope.editingTodo
+						});
+					};
+					$scope["delete"] = function() {
+						$modalInstance.close({
+							func : "delete",
+							item : $scope.editingTodo
+						});
 					};
 				} ];
 				var modalInstance = $modal.open({
@@ -152,10 +158,14 @@
 						}
 					}
 				});
-				modalInstance.result.then(function(editItem) {
-					item.title = editItem.title;
-					item.description = editItem.description;
-					$scope.saveItem(item);
+				modalInstance.result.then(function(res) {
+					if ("delete" == res.func) {
+						$scope.deleteItem(item);
+					} else if ("update" == res.func) {
+						item.title = res.item.title;
+						item.description = res.item.description;
+						$scope.saveItem(item);
+					}
 				}, function() {
 					console.log('Modal dismissed at: ' + new Date());
 				});
@@ -164,7 +174,6 @@
 				}
 			}
 			$scope.saveSortedItems = function(items) {
-				console.log("asdfasdf = " + JSON.stringify(items));
 				$http({
 					url : 'items/sort',
 					method : "put",
@@ -211,35 +220,40 @@
 						'Content-Type' : 'application/json'
 					}
 				}).success(function(data, status, headers, config) {
-					console.log("saved");
 				}).error(function(data, status, headers, config) {
 					$scope.error = "Load error";
 				});
+			}
 
-				if (false)
-					$http.put("items", item).success(function() {
-						console.log("saved");
-					}).error(function() {
-						$scope.error = "Load error";
-					});
-			}
-			$scope.saveTodo = function() {
-				console.log("____saveTodo = " + JSON.stringify($scope.todos));
-				$http.put('api/todo', {
-					projectKey : $scope.projectKey,
-					todos : $scope.todos
+			$scope.deleteItem = function(item) {
+				$http({
+					url : 'items',
+					method : "DELETE",
+					data : JSON.stringify(item),
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).success(function(data, status, headers, config) {
+					for ( var i in $scope.todos) {
+						var items = $scope.todos[i];
+						for ( var j in items) {
+							var targetItem = items[j];
+							if (targetItem.key == item.key) {
+								$scope.todos[i].splice(j, 1);
+								break;
+							}
+						}
+						if (status) {
+							break;
+						}
+					}
 				}).error(function(data, status, headers, config) {
-					$scope.error = "Save error";
+					$scope.error = "Load error";
 				});
-			}
-			
-			$scope.dump = function() {
-				console.log("dump = " + JSON.stringify($scope.todos));
 			}
 			$scope.removeError = function() {
 				$scope.error = null;
 			}
-
 			$scope.deleteDone = function() {
 				$http.post('api/todo/delete', {
 					projectKey : $scope.projectKey,
