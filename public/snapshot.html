@@ -46,25 +46,15 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-1" align="left">
-				<button class="btn btn-default glyphicon glyphicon-plus"
-					style="height: 30px; margin-top: 10px" ng-click="createItem(0)"></button>
-			</div>
-			<div class="col-xs-3 toolSign" align="center" ng-click="dump()">Keep</div>
-			<div class="col-xs-4 toolSign" align="center">Problem</div>
-			<div class="col-xs-3 toolSign" align="center">Try</div>
-			<div class="col-xs-1" align="right"></div>
-		</div>
-		<div class="row">
 			<div ui-sortable="sortableOptions"
 				class="items-container items col-xs-4" ng-model="items"
 				ng-repeat="items in todos">
 				<div key="{{item.key}}" class="item" ng-repeat="item in items"
-					strip-br="true" ng-click="edit(item, $event)"
+					strip-br="true"
 					btf-markdown="item.description"></div>
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="scripts/kpt.js"></script>
+	<script type="text/javascript" src="scripts/snapshot.js"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@ global.db = {
 	Sequelize : Sequelize,
 	sequelize : sequelize,
 	Project : sequelize.import(__dirname + '/project'),
-	Item : sequelize.import(__dirname + '/item')
+	Item : sequelize.import(__dirname + '/item'),
+	Snapshot : sequelize.import(__dirname + '/snapshot')
 }
 module.exports = global.db;
