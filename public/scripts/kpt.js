@@ -17,8 +17,9 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 					for ( var j in items) {
 						var item = items[j];
 						if (item.key == movedItemKey) {
-							var status = i;
-							var index = j;
+							item.status = parseInt(i);
+							item.index = parseInt(j);
+							var movedItem = item;
 							break;
 						}
 					}
@@ -26,17 +27,7 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 						break;
 					}
 				}
-				var changeItems = [];
-				for ( var i in $scope.todos[status]) {
-					var item = $scope.todos[status][i];
-					var changeItem = {};
-					changeItem.key = item.key;
-					changeItem.title = item.title;
-					changeItem.status = status;
-					changeItem.index = i;
-					changeItems.push(changeItem);
-				}
-				$scope.saveSortedItems(changeItems);
+				$scope.saveMovedItem(movedItem);
 			}, 0);
 		},
 		distance : 10
@@ -105,11 +96,14 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			$event.stopPropagation();
 		}
 	}
-	$scope.saveSortedItems = function(items) {
+	$scope.saveMovedItem = function(item) {
 		$http({
-			url : 'items/sort',
+			url : 'items/move',
 			method : "put",
-			data : JSON.stringify(items),
+			data : JSON.stringify({
+				projectKey : $scope.projectKey,
+				item : item
+			}),
 			headers : {
 				'Content-Type' : 'application/json'
 			}
@@ -140,6 +134,30 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			var item = project.items[i];
 			$scope.todos[item.status].push(item);
 		}
+		$scope.socket = io.connect('http://' + window.document.location.host);
+		$scope.socket.emit('message', {
+			command : 'join',
+			projectKey : $scope.projectKey
+		});
+		$scope.socket.on("delete", function(item) {
+			$scope.$apply(function() {
+				$scope.deleteItemFromDisplay(item);
+			});
+		});
+		$scope.socket.on("move", function(item) {
+			$scope.$apply(function() {
+				$scope.deleteItemFromDisplay(item);
+				$scope.insertItemToDispoay(item);
+			});
+		});
+		$scope.socket.on("update", function(item) {
+			$scope.$apply(function() {
+				var updated = $scope.updateItemOnDisplay(item);
+				if (!updated) {
+					$scope.todos[0].push(item);
+				}
+			});
+		});
 	}).error(function(data, status, headers, config) {
 		$scope.error = "Load error";
 	});
@@ -156,7 +174,6 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			$scope.error = "Load error";
 		});
 	}
-
 	$scope.deleteItem = function(item) {
 		$http({
 			url : 'items',
@@ -166,22 +183,40 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 				'Content-Type' : 'application/json'
 			}
 		}).success(function(data, status, headers, config) {
-			for ( var i in $scope.todos) {
-				var items = $scope.todos[i];
-				for ( var j in items) {
-					var targetItem = items[j];
-					if (targetItem.key == item.key) {
-						$scope.todos[i].splice(j, 1);
-						break;
-					}
-				}
-				if (status) {
-					break;
-				}
-			}
+			$scope.deleteItemFromDisplay(item);
 		}).error(function(data, status, headers, config) {
 			$scope.error = "Load error";
 		});
+	}
+	$scope.deleteItemFromDisplay = function(item) {
+		for ( var i in $scope.todos) {
+			var items = $scope.todos[i];
+			for ( var j in items) {
+				var targetItem = items[j];
+				if (targetItem.key == item.key) {
+					$scope.todos[i].splice(j, 1);
+					return;
+				}
+			}
+		}
+	}
+
+	$scope.insertItemToDispoay = function(item) {
+		$scope.todos[item.status].splice(item.index, 0, item);
+	}
+
+	$scope.updateItemOnDisplay = function(item) {
+		for ( var i in $scope.todos) {
+			var items = $scope.todos[i];
+			for ( var j in items) {
+				var targetItem = items[j];
+				if (targetItem.key == item.key) {
+					items[j] = item;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	$scope.removeError = function() {
 		$scope.error = null;
@@ -195,7 +230,6 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 		});
 		$scope.todos[2] = [];
 	}
-
 	$scope.takeSnapShot = function(item) {
 		$http({
 			url : 'projects/snapshot',

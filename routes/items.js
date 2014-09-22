@@ -15,6 +15,7 @@ router.post('/', function(req, res) {
 		res.json(error);
 	});
 });
+
 router.put('/', function(req, res) {
 	var requestItem = req.body;
 	Item.find({
@@ -32,28 +33,53 @@ router.put('/', function(req, res) {
 		item.index = parseInt(requestItem.index);
 		item.save().success(function(item) {
 			res.json(item);
+			global.io.sockets.in(item.projectKey).emit("update", item);
 		}).error(function(error) {
 			res.json(error);
 		});
 	})
 });
-router.put('/sort', function(req, res) {
-	var sortItems = req.body;
-	for ( var i in sortItems) {
-		var sortItem = sortItems[i];
-		if (sortItem.key) {
-			Item.update(sortItem, {
-				key : sortItem.key
-			}).success(function() {
-			}).error(function() {
+
+router.put('/move', function(req, res) {
+	var movedItem = req.body.item;
+	Item.findAll({
+		where : {
+			projectKey: movedItem.projectKey,
+			status: movedItem.status
+		},
+		order : [ 'index' ]
+	}).success(function(items) {
+		var index = 0;
+		for ( var i in items) {
+			var sortItem = items[i];
+			if(sortItem.key == movedItem.key){
+				continue;
+			}
+			if(i == movedItem.index){
+				index++;
+			} else {
+			}
+		    sortItem.index = index++;
+		    
+			sortItem.save().success(function() {
+			}).error(function(err) {
+				console.log("err = "+err)
 			});
 		}
-	}
+		Item.update(movedItem,{
+			key: movedItem.key
+		}).success(function() {
+		}).error(function(err) {
+			console.log("err = "+err);
+		});
+	});
+	global.io.sockets.in(req.body.projectKey).emit("move", movedItem);
 	res.json({
 		message : "accepted"
 	});
 });
-router.delete('/', function(req, res) {
+
+router['delete']('/', function(req, res) {
 	Item.find({
 		where : {
 			key : req.body.key
@@ -67,6 +93,7 @@ router.delete('/', function(req, res) {
 			res.json({
 				message : "accepted"
 			});
+			global.io.sockets.in(item.projectKey).emit("delete", item);
 		});
 	});
 });

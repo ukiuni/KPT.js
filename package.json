@@ -23,7 +23,8 @@
     "sequelize": "~1.7.10",
     "sqlite3": "~2.2.7",
     "node-uuid": "~1.4.1",
-    "body-parser": "~1.8.2"
+    "body-parser": "~1.8.2",
+    "socket.io": "~1.1.0"
   },
   "devDependencies": {
     "express-generator": "~4.9.0",
