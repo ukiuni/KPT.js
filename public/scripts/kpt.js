@@ -1,4 +1,4 @@
-var myapp = angular.module('sortableApp', [ 'ui.sortable', 'ui.bootstrap', 'dialogs', 'ngSanitize', 'btford.markdown' ]);
+var myapp = angular.module('kptApp', [ 'ui.sortable', 'ui.bootstrap', 'dialogs', 'ngSanitize', 'btford.markdown' ]);
 myapp.config([ "$locationProvider", "$httpProvider", function($locationProvider, $httpProvider) {
 	$locationProvider.html5Mode(true);
 	$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
@@ -230,7 +230,7 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 		});
 		$scope.todos[2] = [];
 	}
-	$scope.takeSnapShot = function(item) {
+	$rootScope.takeSnapShot = function(item) {
 		$http({
 			url : 'projects/snapshot',
 			method : "POST",

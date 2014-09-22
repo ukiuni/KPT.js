@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="sortableApp" ng-controller="myController">
+<html ng-app="kptApp">
 <head>
 <meta charset="UTF-8">
 <title ng-model="projectName">{{projectName}}</title>
@@ -46,12 +46,17 @@
 			</div>
 		</div>
 		<div class="row">
-			<div ui-sortable="sortableOptions"
-				class="items-container items col-xs-4" ng-model="items"
+			<div class="col-xs-1" align="left"></div>
+			<div class="col-xs-3 toolSign" align="center" ng-click="dump()">Keep</div>
+			<div class="col-xs-4 toolSign" align="center">Problem</div>
+			<div class="col-xs-3 toolSign" align="center">Try</div>
+			<div class="col-xs-1" align="right"></div>
+		</div>
+		<div class="row">
+			<div class="items-container items col-xs-4" ng-model="items"
 				ng-repeat="items in todos">
 				<div key="{{item.key}}" class="item" ng-repeat="item in items"
-					strip-br="true"
-					btf-markdown="item.description"></div>
+					strip-br="true" btf-markdown="item.description"></div>
 			</div>
 		</div>
 	</div>

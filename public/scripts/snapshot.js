@@ -1,4 +1,4 @@
-var myapp = angular.module('sortableApp', [ 'ui.sortable', 'ui.bootstrap', 'dialogs', 'ngSanitize', 'btford.markdown' ]);
+var myapp = angular.module('kptApp', [ 'ui.sortable', 'ui.bootstrap', 'dialogs', 'ngSanitize', 'btford.markdown' ]);
 myapp.config([ "$locationProvider", "$httpProvider", function($locationProvider, $httpProvider) {
 	$locationProvider.html5Mode(true);
 	$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
@@ -41,7 +41,7 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 		},
 		distance : 10
 	};
-	$scope.isSnapshot = true;
+	$rootScope.isSnapshot = true;
 	$scope.key = $location.search()["key"];
 	if (!$scope.key) {
 		$scope.error = "project not defined";
