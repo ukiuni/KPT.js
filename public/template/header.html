@@ -9,8 +9,9 @@
 			</button>
 			<a class="navbar-brand" href="#" ng-model="projectName">{{projectName}}</a>
 		</div>
-		<ul class="nav navbar-nav navbar-right">
-			<li><a href="#" ng-click="takeSnapShot()" ng-show="!isSnapshot">SnapShot</a></li>
+		<ul class="nav navbar-nav navbar-right" ng-show="!isSnapshot">
+			<li><a href="#" ng-click="confirmDeleteKPItems()">Delete KP</a></li>
+			<li><a href="#" ng-click="takeSnapShot()">SnapShot</a></li>
 		</ul>
 	</div>
 	<!--/.container-fluid -->

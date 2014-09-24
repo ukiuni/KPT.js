@@ -188,6 +188,38 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			$scope.error = "Load error";
 		});
 	}
+
+	$rootScope.confirmDeleteKPItems = function() {
+		var dialogController = [ "$scope", "$modalInstance", function($dialogScope, $modalInstance) {
+			$dialogScope['delete'] = function() {
+				$modalInstance.close();
+			};
+		} ];
+		var modalInstance = $modal.open({
+			templateUrl : 'template/confirmDeleteKeepAndDeleteItemsDialog.html?time=' + new Date().getTime(),
+			controller : dialogController
+		});
+		modalInstance.result.then(function(res) {
+			$scope.deleteKPItems();
+		}, function() {
+			console.log('Modal dismissed at: ' + new Date());
+		});
+	}
+	$scope.deleteKPItems = function() {
+		$http({
+			url : 'items',
+			method : "DELETE",
+			data : JSON.stringify($scope.todos[0].concat($scope.todos[1])),
+			headers : {
+				'Content-Type' : 'application/json'
+			}
+		}).success(function(data, status, headers, config) {
+			$scope.todos[0] = [];
+			$scope.todos[1] = [];
+		}).error(function(data, status, headers, config) {
+			$scope.error = "Load error";
+		});
+	}
 	$scope.deleteItemFromDisplay = function(item) {
 		for ( var i in $scope.todos) {
 			var items = $scope.todos[i];

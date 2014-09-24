@@ -80,20 +80,28 @@ router.put('/move', function(req, res) {
 });
 
 router['delete']('/', function(req, res) {
-	Item.find({
-		where : {
-			key : req.body.key
-		}
-	}).success(function(item) {
-		if (null == item) {
-			res.json(error);
-			return;
-		}
-		item.destroy().success(function() {
-			res.json({
-				message : "accepted"
+	if(Array.isArray(req.body)){
+		var items = req.body
+	} else {
+		var items = [req.body]
+	}
+	items.forEach(function(item){
+		Item.find({
+			where : {
+				key : item.key
+			}
+		}).success(function(findedItem) {
+			if (null == findedItem) {
+				return;
+			}
+			findedItem.destroy().success(function() {
+				if(1 == items.length){
+					res.json({
+						message : "accepted"
+					});
+				}
+				global.io.sockets.in(item.projectKey).emit("delete", item);
 			});
-			global.io.sockets.in(item.projectKey).emit("delete", item);
 		});
 	});
 });

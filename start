@@ -1,0 +1,1 @@
+nohup node kpt.js>>kpt.js 2>&1 </dev/null &
