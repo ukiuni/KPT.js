@@ -32,21 +32,23 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 		},
 		distance : 10
 	};
-	$scope.createItem = function() {
+	$scope.createItem = function(status) {
 		$http({
 			url : 'items',
 			method : "POST",
 			data : JSON.stringify({
 				projectKey : $scope.projectKey,
-				index : $scope.todos[0].length
+				index : $scope.todos[status].length,
+				status : status
 			}),
 			headers : {
 				'Content-Type' : 'application/json'
 			}
-		}).success(function(item, status, headers, config) {
+		}).success(function(item, responseStatus, headers, config) {
 			item.title = "";
 			item.description = "";
-			$scope.todos[0].push(item);
+			console.log("status is " + status);
+			$scope.todos[status].push(item);
 			$scope.edit(item);
 		}).error(function(data, status, headers, config) {
 			$scope.error = "Load error";
@@ -154,7 +156,7 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			$scope.$apply(function() {
 				var updated = $scope.updateItemOnDisplay(item);
 				if (!updated) {
-					$scope.todos[0].push(item);
+					$scope.todos[item.status].push(item);
 				}
 			});
 		});

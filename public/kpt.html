@@ -47,14 +47,20 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-1" align="left">
+			<div class="col-xs-4 toolSign" align="center" ng-click="dump()">
+				Keep
 				<button class="btn btn-default glyphicon glyphicon-plus"
-					style="height: 30px; margin-top: 10px" ng-click="createItem(0)"></button>
+					style="height: 30px; margin-top: -5px; margin-left: 5px"
+					ng-click="createItem(0)"></button>
 			</div>
-			<div class="col-xs-3 toolSign" align="center" ng-click="dump()">Keep</div>
-			<div class="col-xs-4 toolSign" align="center">Problem</div>
-			<div class="col-xs-3 toolSign" align="center">Try</div>
-			<div class="col-xs-1" align="right"></div>
+			<div class="col-xs-4 toolSign" align="center">Problem
+				<button class="btn btn-default glyphicon glyphicon-plus"
+					style="height: 30px; margin-top: -5px; margin-left: 5px"
+					ng-click="createItem(1)"></div>
+			<div class="col-xs-4 toolSign" align="center">Try
+				<button class="btn btn-default glyphicon glyphicon-plus"
+					style="height: 30px; margin-top: -5px; margin-left: 5px"
+					ng-click="createItem(2)"></div>
 		</div>
 		<div class="row">
 			<div ui-sortable="sortableOptions"
