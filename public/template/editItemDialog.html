@@ -1,10 +1,10 @@
 <div class="modal-body">
-	<textarea ng-model="editingTodo.description" class="form-control"
+	<textarea id="itemInputTextArea" ng-model="editingTodo.description" class="form-control"
 		style="width: 100%; height: 200px"></textarea>
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-danger" style="float: left"
 		ng-click="delete()">Delete</button>
-	<button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
-	<button type="button" class="btn btn-primary" ng-click="save()">Save</button>
+	<button type="button" id="closeButton" class="btn btn-default" ng-click="$dismiss()">Close</button>
+	<button type="button" id="saveButton" class="btn btn-primary" ng-click="save()">Save</button>
 </div>

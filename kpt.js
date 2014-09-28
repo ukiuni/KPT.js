@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/projects', projectController);
 app.use('/items', itemsController);
 
+var execfunc = []
 db.sequelize.sync().complete(function(err) {
 	if (err) {
 		console.log(err);
@@ -30,8 +31,18 @@ db.sequelize.sync().complete(function(err) {
 		server.listen(app.get('port'), function() {
 			console.log('Express server listening on port ' + app.get('port'))
 		});
+		execfunc.push(function() {
+			server.close();
+		});
 	}
 });
 global.UUID.create = function() {
 	return UUID.v4().split('-').join('');
 }
+module.exports = {
+	close : function() {
+		for ( var i in execfunc) {
+			execfunc[i]();
+		}
+	}
+};

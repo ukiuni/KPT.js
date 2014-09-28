@@ -4,7 +4,7 @@
   "description": "kpt tool",
   "main": "kpt.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/jasmine-node/bin/jasmine-node spec/"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "author": "ukiuni",
   "license": "Apache Software License 2.0",
   "bugs": {
-    "url": "https://github.com/ukiuni/kptjs/issues"
+    "url": "https://github.com/ukiuni/KPT.js/issues"
   },
   "dependencies": {
     "express": "~4.9.0",
@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "express-generator": "~4.9.0",
-    "supervisor": "~0.6.0"
+    "supervisor": "~0.6.0",
+    "selenium-webdriver": "~2.43.5",
+    "jasmine-node": "~1.14.5"
   }
 }

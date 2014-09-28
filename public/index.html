@@ -8,7 +8,7 @@
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 <script
 	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-
+<title>KPT</title>
 </head>
 <body style="background-color: #F0F0F0; height: 100%">
 	<div class="jumbotron" style="margin: 0">
@@ -23,11 +23,11 @@
 		style="background-color: white; padding: 20px; padding-top: 30px">
 		<div class="col-lg-offset-3 col-lg-6 col-xs-10 col-xs-offset-1">
 			<div class="input-group">
-				<input type="text" id="projectNameInput" class="form-control"
-					placeholder="Enter Project Name"> <span
+				<input id="projectNameInput" type="text" id="projectNameInput"
+					class="form-control" placeholder="Enter Project Name"> <span
 					class="input-group-btn">
-					<button class="btn btn-primary" type="button" onclick="send()">Create
-						New Project</button>
+					<button id="createProjectButton" class="btn btn-primary"
+						type="button" onclick="send()">Create New Project</button>
 				</span>
 			</div>
 			<b>** never forget next pages URL. It's your only SECRET URL. **</b>

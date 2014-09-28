@@ -49,20 +49,27 @@
 		<div class="row">
 			<div class="col-xs-4 toolSign" align="center" ng-click="dump()">
 				Keep
-				<button class="btn btn-default glyphicon glyphicon-plus"
+				<button id="createKeepButton"
+					class="btn btn-default glyphicon glyphicon-plus"
 					style="height: 30px; margin-top: -5px; margin-left: 5px"
 					ng-click="createItem(0)"></button>
 			</div>
-			<div class="col-xs-4 toolSign" align="center">Problem
-				<button class="btn btn-default glyphicon glyphicon-plus"
+			<div class="col-xs-4 toolSign" align="center">
+				Problem
+				<button id="createProblemButton"
+					class="btn btn-default glyphicon glyphicon-plus"
 					style="height: 30px; margin-top: -5px; margin-left: 5px"
-					ng-click="createItem(1)"></div>
-			<div class="col-xs-4 toolSign" align="center">Try
-				<button class="btn btn-default glyphicon glyphicon-plus"
+					ng-click="createItem(1)">
+			</div>
+			<div class="col-xs-4 toolSign" align="center">
+				Try
+				<button id="createTryButton"
+					class="btn btn-default glyphicon glyphicon-plus"
 					style="height: 30px; margin-top: -5px; margin-left: 5px"
-					ng-click="createItem(2)"></div>
+					ng-click="createItem(2)">
+			</div>
 		</div>
-		<div class="row">
+		<div class="row" id="itemArea">
 			<div ui-sortable="sortableOptions"
 				class="items-container items col-xs-4" ng-model="items"
 				ng-repeat="items in todos">

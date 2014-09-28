@@ -274,8 +274,8 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			headers : {
 				'Content-Type' : 'application/json'
 			}
-		}).success(function(data, status, headers, config) {
-			$window.open("snapshot.html?key=" + data.key);
+		}).then(function(data, status, headers, config) {
+			$window.open("snapshot.html?key=" + data.key, "_blank");
 		}).error(function(data, status, headers, config) {
 			$scope.error = "error";
 		});
