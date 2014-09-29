@@ -2,7 +2,7 @@
 <html ng-app="kptApp">
 <head>
 <meta charset="UTF-8">
-<title ng-model="projectName">{{projectName}}</title>
+<title ng-model="projectName" ng-controller="sortableController"></title>
 
 <script
 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -34,7 +34,7 @@
 <body>
 	<div id="header" ng-include="'template/header.html'"
 		style="margin: 0; padding: 0"></div>
-	<div style="margin: 20px" ng-controller="sortableController">
+	<div style="margin: 20px">
 		<div class="row" ng-show="error" class="ng-hide">
 			<div class="col-xs-8 col-xs-offset-2">
 				<div class="alert alert-danger" role="alert">
