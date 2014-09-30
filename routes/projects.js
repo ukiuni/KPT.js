@@ -64,6 +64,7 @@ router.post('/snapshot', function(req, res) {
 					key : snapshot.key
 				});
 			}).error(function(error) {
+				console.log(error);
 				res.json(error);
 			});
 		}).error(function(error) {
