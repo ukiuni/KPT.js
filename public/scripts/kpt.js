@@ -47,7 +47,6 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 		}).success(function(item, responseStatus, headers, config) {
 			item.title = "";
 			item.description = "";
-			console.log("status is " + status);
 			$scope.todos[status].push(item);
 			$scope.edit(item);
 		}).error(function(data, status, headers, config) {
@@ -274,8 +273,19 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			headers : {
 				'Content-Type' : 'application/json'
 			}
-		}).then(function(data, status, headers, config) {
-			$window.open("snapshot.html?key=" + data.key, "_blank");
+		}).success(function(data, status, headers, config) {
+			var dialogController = [ "$scope", "$modalInstance", "link", function($scope, $modalInstance, link) {
+				$scope.link = link;
+			} ];
+			var modalInstance = $modal.open({
+				templateUrl : 'template/openSnapshotDialog.html?time=' + new Date().getTime(),
+				controller : dialogController,
+				resolve : {
+					link : function() {
+						return "snapshot.html?key=" + data.key;
+					}
+				}
+			});
 		}).error(function(data, status, headers, config) {
 			$scope.error = "error";
 		});

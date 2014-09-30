@@ -10,6 +10,10 @@ router.get('/', function(req, res) {
 	Project.find({
 		where : [ 'key = ?', projectKey ]
 	}).success(function(project) {
+		if (!project) {
+			res.status(404).send();
+			return;
+		}
 		Item.findAll({
 			where : [ 'projectKey = ?', projectKey ],
 			order : [ 'index', 'status' ]
@@ -64,6 +68,7 @@ router.post('/snapshot', function(req, res) {
 					key : snapshot.key
 				});
 			}).error(function(error) {
+				console.log(error);
 				res.json(error);
 			});
 		}).error(function(error) {
@@ -80,6 +85,10 @@ router.get('/snapshot', function(req, res) {
 	Snapshot.find({
 		where : [ 'key = ?', snapshotKey ]
 	}).success(function(snapshot) {
+		if (!snapshot) {
+			res.status(404).send();
+			return;
+		}
 		res.json({
 			project : {
 				name : snapshot.projectName

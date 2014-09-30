@@ -59,14 +59,5 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 	$scope.removeError = function() {
 		$scope.error = null;
 	}
-	$scope.deleteDone = function() {
-		$http.post('api/todo/delete', {
-			projectKey : $scope.projectKey,
-			todos : $scope.todos[2]
-		}).error(function(data, status, headers, config) {
-			$scope.error = "Delete error";
-		});
-		$scope.todos[2] = [];
-	}
 } ];
 myapp.controller('sortableController', myController);
