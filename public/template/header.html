@@ -10,8 +10,15 @@
 			<a class="navbar-brand" href="#" ng-model="projectName">{{projectName}}</a>
 		</div>
 		<ul class="nav navbar-nav navbar-right" ng-show="!isSnapshot">
-			<li><a href="#" ng-click="confirmDeleteKPItems()">Delete KP</a></li>
+			<li class="dropdown"><a href="#" class="dropdown-toggle"
+				data-toggle="dropdown">Delete<span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="#" ng-click="confirmDeleteItems('Keep')">Keep</a></li>
+					<li><a href="#" ng-click="confirmDeleteItems('Problem')">Problem</a></li>
+					<li><a href="#" ng-click="confirmDeleteItems('Try')">Try</a></li>
+				</ul></li>
 			<li><a href="#" ng-click="takeSnapShot()">SnapShot</a></li>
+
 		</ul>
 	</div>
 	<!--/.container-fluid -->

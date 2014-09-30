@@ -190,33 +190,45 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 		});
 	}
 
-	$rootScope.confirmDeleteKPItems = function() {
-		var dialogController = [ "$scope", "$modalInstance", function($dialogScope, $modalInstance) {
+	$rootScope.confirmDeleteItems = function(type) {
+		var dialogController = [ "$scope", "$modalInstance", "type", function($dialogScope, $modalInstance, type) {
+			$dialogScope.type = type;
 			$dialogScope['delete'] = function() {
-				$modalInstance.close();
+				$modalInstance.close(type);
 			};
 		} ];
 		var modalInstance = $modal.open({
-			templateUrl : 'template/confirmDeleteKeepAndDeleteItemsDialog.html?time=' + new Date().getTime(),
-			controller : dialogController
+			templateUrl : 'template/confirmDeleteItemsDialog.html',
+			controller : dialogController,
+			resolve : {
+				type : function() {
+					return type;
+				}
+			}
 		});
-		modalInstance.result.then(function(res) {
-			$scope.deleteKPItems();
+		modalInstance.result.then(function(type) {
+			$scope.deleteItems(type);
 		}, function() {
 			console.log('Modal dismissed at: ' + new Date());
 		});
 	}
-	$scope.deleteKPItems = function() {
+	$scope.deleteItems = function(type) {
+		if (type === "Keep") {
+			var index = 0;
+		} else if (type === "Problem") {
+			var index = 1;
+		} else {
+			var index = 2;
+		}
 		$http({
 			url : 'items',
 			method : "DELETE",
-			data : JSON.stringify($scope.todos[0].concat($scope.todos[1])),
+			data : JSON.stringify($scope.todos[index]),
 			headers : {
 				'Content-Type' : 'application/json'
 			}
 		}).success(function(data, status, headers, config) {
-			$scope.todos[0] = [];
-			$scope.todos[1] = [];
+			$scope.todos[index] = [];
 		}).error(function(data, status, headers, config) {
 			$scope.error = "Load error";
 		});
