@@ -56,7 +56,11 @@
 			<div class="items-container items col-xs-4" ng-model="items"
 				ng-repeat="items in todos">
 				<div key="{{item.key}}" class="item" ng-repeat="item in items"
-					strip-br="true" btf-markdown="item.description"></div>
+					strip-br="true">
+					<a href="#" id="{{item.number}}">{{item.number}}</a>&nbsp;<span
+						ng-click="edit(item, $event)" class="itemDescription"
+						btf-markdown="item.description"></span>
+				</div>
 			</div>
 		</div>
 	</div>

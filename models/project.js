@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
 		key : {
 			type : Sequelize.STRING,
 			unique : true
-		}
+		},
+		itemIncrements : Sequelize.BIGINT
 	});
 }

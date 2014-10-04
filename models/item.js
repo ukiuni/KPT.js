@@ -9,6 +9,7 @@ module.exports = function(sequelize, DataTypes) {
 		key : {
 			type : Sequelize.STRING,
 			unique : true
-		}
+		},
+		number : Sequelize.BIGINT
 	});
 }

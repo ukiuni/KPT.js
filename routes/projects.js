@@ -41,7 +41,8 @@ router.post('/', function(req, res) {
 	}
 	Project.create({
 		name : projectName,
-		key : global.UUID.create()
+		key : global.UUID.create(),
+		itemIncrements : 1
 	}).success(function(project) {
 		res.json(project);
 	}).error(function(error) {

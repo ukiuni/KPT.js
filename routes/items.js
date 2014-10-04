@@ -1,18 +1,38 @@
+var Project = global.db.Project;
 var Item = global.db.Item;
 
 var express = require('express');
 var router = express.Router();
 
 router.post('/', function(req, res) {
-	Item.create({
-		projectKey : req.body.projectKey,
-		key : global.UUID.create(),
-		status : req.body.status,
-		index : parseInt(req.body.index)
+	Project.find({
+		where : [ 'key = ?', req.body.projectKey ]
 	}).success(function(project) {
-		res.json(project);
+		if(!project){
+			res.status(404).send();
+			return;
+		}
+		project.increment({itemIncrements:1}).success(function(project) {
+			console.log("project.itemIncrements = "+project.itemIncrements);
+			Item.create({
+				projectKey : project.key,
+				key : global.UUID.create(),
+				status : req.body.status,
+				index : parseInt(req.body.index),
+				number: project.itemIncrements
+			}).success(function(item) {
+				res.json(item);
+			}).error(function(error) {
+				console.log("error = " +error);
+				res.status(500).json(error);
+			});
+		}).error(function(error) {
+			console.log("error = " +error);
+			res.status(500).json(error);
+		});
 	}).error(function(error) {
-		res.json(error);
+		console.log("error = " +error);
+		res.status(500).json(error);
 	});
 });
 

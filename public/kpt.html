@@ -33,49 +33,58 @@
 
 </head>
 <body>
-	<div id="header" ng-include="'template/header.html'"
-		style="margin: 0; padding: 0"></div>
-	<div style="margin: 20px">
-		<div class="row" ng-show="error" class="ng-hide">
-			<div class="col-xs-8 col-xs-offset-2">
-				<div class="alert alert-danger" role="alert">
-					<button type="button" class="close">
-						<span ng-click="removeError()">&times;</span><span class="sr-only">Close</span>
-					</button>
-					<strong>Error!</strong><span style="margin-left: 10px">{{error}}</span>
+	<div
+		style="position: fixed; width: 100%; margin: 0; padding: 0; margin-top: 0; z-index: 99"
+		class="row">
+		<div id="header" ng-include="'template/header.html'"
+			style="margin: 0; padding: 0"></div>
+		<div style="margin-top: 20px; margin-left: 20px; margin-right: 20px;">
+			<div class="row" ng-show="error" class="ng-hide">
+				<div class="col-xs-8 col-xs-offset-2">
+					<div class="alert alert-danger" role="alert">
+						<button type="button" class="close">
+							<span ng-click="removeError()">&times;</span><span
+								class="sr-only">Close</span>
+						</button>
+						<strong>Error!</strong><span style="margin-left: 10px">{{error}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4 toolSign" align="center" ng-click="dump()">
+					Keep
+					<button id="createKeepButton"
+						class="btn btn-default glyphicon glyphicon-plus"
+						style="height: 30px; margin-top: -5px; margin-left: 5px"
+						ng-click="createItem(0)"></button>
+				</div>
+				<div class="col-xs-4 toolSign" align="center">
+					Problem
+					<button id="createProblemButton"
+						class="btn btn-default glyphicon glyphicon-plus"
+						style="height: 30px; margin-top: -5px; margin-left: 5px"
+						ng-click="createItem(1)">
+				</div>
+				<div class="col-xs-4 toolSign" align="center">
+					Try
+					<button id="createTryButton"
+						class="btn btn-default glyphicon glyphicon-plus"
+						style="height: 30px; margin-top: -5px; margin-left: 5px"
+						ng-click="createItem(2)">
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-4 toolSign" align="center" ng-click="dump()">
-				Keep
-				<button id="createKeepButton"
-					class="btn btn-default glyphicon glyphicon-plus"
-					style="height: 30px; margin-top: -5px; margin-left: 5px"
-					ng-click="createItem(0)"></button>
-			</div>
-			<div class="col-xs-4 toolSign" align="center">
-				Problem
-				<button id="createProblemButton"
-					class="btn btn-default glyphicon glyphicon-plus"
-					style="height: 30px; margin-top: -5px; margin-left: 5px"
-					ng-click="createItem(1)">
-			</div>
-			<div class="col-xs-4 toolSign" align="center">
-				Try
-				<button id="createTryButton"
-					class="btn btn-default glyphicon glyphicon-plus"
-					style="height: 30px; margin-top: -5px; margin-left: 5px"
-					ng-click="createItem(2)">
-			</div>
-		</div>
-		<div class="row" id="itemArea">
-			<div ui-sortable="sortableOptions"
-				class="items-container items col-xs-4" ng-model="items"
-				ng-repeat="items in todos">
-				<div key="{{item.key}}" class="item" ng-repeat="item in items"
-					strip-br="true" ng-click="edit(item, $event)"
-					btf-markdown="item.description"></div>
+	</div>
+	<div class="row" id="itemArea"
+		style="position: relative; min-height: 100px; overflow: hidden; padding-top: 120px; margin-left: 20px; margin-right: 20px;">
+		<div style="padding-bottom: 32768px; margin-bottom: -32768px;"
+			ui-sortable="sortableOptions" class="items-container items col-xs-4"
+			ng-model="items" ng-repeat="items in todos">
+			<div key="{{item.key}}" class="item" ng-repeat="item in items"
+				strip-br="true">
+				<a href="#" id="{{item.number}}">{{item.number}}</a>&nbsp;<span
+					ng-click="edit(item, $event)" class="itemDescription"
+					btf-markdown="item.description"></span>
 			</div>
 		</div>
 	</div>
