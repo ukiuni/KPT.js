@@ -9,9 +9,7 @@
 <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script type="text/javascript"
 	src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular.min.js"></script>
-<script
-	src="//rawgithub.com/angular-ui/ui-sortable/master/src/sortable.js"></script>
-
+<script src="scripts/sortable.js"></script>
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <link rel="stylesheet"
@@ -82,7 +80,7 @@
 			ng-model="items" ng-repeat="items in todos">
 			<div key="{{item.key}}" class="item" ng-repeat="item in items"
 				strip-br="true" ng-click="edit(item, $event)">
-				<span href="#" id="{{item.number}}" style="color:#339">{{item.number}}</span>&nbsp;<span
+				<span href="#" id="{{item.number}}" style="color: #339">{{item.number}}</span>&nbsp;<span
 					class="itemDescription" btf-markdown="item.description"></span>
 			</div>
 		</div>
