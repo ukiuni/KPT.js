@@ -1,7 +1,7 @@
 {
-  "name": "kptjs",
-  "version": "0.0.1",
-  "description": "kpt tool",
+  "name": "kpt",
+  "version": "0.0.2",
+  "description": "KPT tool uses with browser",
   "main": "kpt.js",
   "scripts": {
     "test": "./node_modules/jasmine-node/bin/jasmine-node spec/"
@@ -17,6 +17,9 @@
   "license": "Apache Software License 2.0",
   "bugs": {
     "url": "https://github.com/ukiuni/KPT.js/issues"
+  },
+  "scripts":{
+	  "start": "node kpt.js"
   },
   "dependencies": {
     "express": "~4.9.0",
