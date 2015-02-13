@@ -32,7 +32,7 @@
   "devDependencies": {
     "express-generator": "~4.9.0",
     "supervisor": "~0.6.0",
-    "selenium-webdriver": "~2.43.5",
+    "selenium-webdriver": "~2.44.0",
     "jasmine-node": "~1.14.5"
   }
 }
