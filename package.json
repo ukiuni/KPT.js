@@ -4,7 +4,7 @@
   "description": "KPT tool uses with browser",
   "main": "kpt.js",
   "scripts": {
-    "test": "./node_modules/jasmine-node/bin/jasmine-node spec/"
+    "start": "node kpt.js"
   },
   "repository": {
     "type": "git",
@@ -18,16 +18,14 @@
   "bugs": {
     "url": "https://github.com/ukiuni/KPT.js/issues"
   },
-  "scripts":{
-	  "start": "node kpt.js"
-  },
   "dependencies": {
-    "express": "~4.9.0",
-    "sequelize": "~1.7.10",
-    "sqlite3": "~2.2.7",
-    "node-uuid": "~1.4.1",
     "body-parser": "~1.8.2",
-    "socket.io": "~1.1.0"
+    "express": "~4.9.0",
+    "node-uuid": "~1.4.1",
+    "redis": "^0.12.1",
+    "sequelize": "~1.7.10",
+    "socket.io": "~1.1.0",
+    "sqlite3": "~2.2.7"
   },
   "devDependencies": {
     "express-generator": "~4.9.0",

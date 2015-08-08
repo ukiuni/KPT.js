@@ -3,7 +3,6 @@
     "username": "",
     "password": "",
     "database": "kpt",
-    "host": "localhost",
     "dialect": "sqlite",
     "storage" : "./sqlite.db"
   },
@@ -12,7 +11,11 @@
     "password": null,
     "database": "database_test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "redis":{
+    	"host":"example.com",
+    	"port":6379
+    }
   },
   "production": {
     "username": "root",

@@ -1,9 +1,7 @@
-var Sequelize = require('sequelize')
-var sequelize = new Sequelize('kpt', '', '', {
-	dialect : 'sqlite',
-	storage : './sqlite.db'
-});
-
+var Sequelize = require('sequelize');
+var env = process.env.NODE_ENV || "development";
+var config = require(__dirname + '/../config/config.json')[env];
+var sequelize = new Sequelize(config.database, config.username, config.password, config);
 global.db = {
 	Sequelize : Sequelize,
 	sequelize : sequelize,
