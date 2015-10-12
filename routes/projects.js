@@ -1,10 +1,8 @@
 var Project = global.db.Project;
 var Item = global.db.Item;
 var Snapshot = global.db.Snapshot;
-
 var express = require('express');
 var router = express.Router();
-
 router.get('/', function(req, res) {
 	var projectKey = req.param('key');
 	Project.find({
@@ -15,7 +13,9 @@ router.get('/', function(req, res) {
 			return;
 		}
 		Item.findAll({
-			where : [ 'projectKey = ?', projectKey ],
+			where : [ {
+				projectKey : projectKey
+			} ],
 			order : [ 'index', 'status' ]
 		}).success(function(items) {
 			res.json({
@@ -30,7 +30,6 @@ router.get('/', function(req, res) {
 		res.status(500).json(error);
 	});
 });
-
 router.post('/', function(req, res) {
 	var projectName = req.param('name');
 	if (!projectName) {
@@ -49,14 +48,15 @@ router.post('/', function(req, res) {
 		res.json(error);
 	});
 });
-
 router.post('/snapshot', function(req, res) {
 	var projectKey = req.param('key');
 	Project.find({
 		where : [ 'key = ?', projectKey ]
 	}).success(function(project) {
 		Item.findAll({
-			where : [ 'projectKey = ?', projectKey ],
+			where : [ {
+				projectKey : projectKey
+			} ],
 			order : [ 'index', 'status' ]
 		}).success(function(items) {
 			Snapshot.create({
@@ -80,7 +80,6 @@ router.post('/snapshot', function(req, res) {
 		res.status(500).json(error);
 	});
 });
-
 router.get('/snapshot', function(req, res) {
 	var snapshotKey = req.param('key');
 	Snapshot.find({
@@ -100,5 +99,4 @@ router.get('/snapshot', function(req, res) {
 		res.status(500).json(error);
 	});
 });
-
 module.exports = router;
