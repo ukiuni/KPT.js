@@ -27,7 +27,7 @@
     "redis": "^0.12.1",
     "sequelize": "~1.7.10",
     "socket.io": "~1.1.0",
-    "sqlite3": "-3.0.5"
+    "sqlite3": "~3.0.5"
   },
   "devDependencies": {
     "express-generator": "~4.9.0",
