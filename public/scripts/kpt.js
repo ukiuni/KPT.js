@@ -5,6 +5,34 @@ myapp.config([ "$locationProvider", "$httpProvider", function($locationProvider,
 	$httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 } ]);
 var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", "$http", "$window", function($rootScope, $scope, $dialogs, $modal, $location, $http, $window) {
+	var saveFunction = null;
+	$(window).bind('keydown', function(event) {
+		if (event.ctrlKey || event.metaKey) {
+			switch (String.fromCharCode(event.which).toLowerCase()) {
+			case 's':
+				event.preventDefault();
+				if(saveFunction) {
+					saveFunction();
+				}
+				break;
+			case 'k':
+				event.preventDefault();
+				if(saveFunction){return;}
+				$scope.createItem(0);
+				break;
+			case 'p':
+				event.preventDefault();
+				if(saveFunction){return;}
+				$scope.createItem(1);
+				break;
+			case 't':
+				event.preventDefault();
+				if(saveFunction){return;}
+				$scope.createItem(2);
+				break;
+			}
+		}
+	});
 	$scope.sortingLog = [];
 	$scope.sortableOptions = {
 		placeholder : "item",
@@ -53,6 +81,7 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			$scope.error = "Load error";
 		});
 	}
+	var modalInstance = null;
 	$scope.edit = function(item, $event) {
 		$scope.editingTodo = {
 			title : item.title + "",
@@ -60,7 +89,8 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 		};
 		var dialogController = [ "$scope", "$modalInstance", "editingTodo", function($scope, $modalInstance, editingTodo) {
 			$scope.editingTodo = editingTodo;
-			$scope.save = function() {
+			
+			$scope.save = saveFunction = function() {
 				$modalInstance.close({
 					func : "update",
 					item : $scope.editingTodo
@@ -73,7 +103,7 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 				});
 			};
 		} ];
-		var modalInstance = $modal.open({
+		modalInstance = $modal.open({
 			templateUrl : 'template/editItemDialog.html?time=' + new Date().getTime(),
 			controller : dialogController,
 			resolve : {
@@ -82,6 +112,9 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 				}
 			}
 		});
+		setTimeout(function(){
+			document.getElementById("itemInputTextArea").focus()
+		}, 500);
 		modalInstance.result.then(function(res) {
 			if ("delete" == res.func) {
 				$scope.deleteItem(item);
@@ -90,6 +123,8 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 				item.description = res.item.description;
 				$scope.saveItem(item);
 			}
+			$scope.editingTodo = null;
+			saveFunction = null;
 		}, function() {
 			console.log('Modal dismissed at: ' + new Date());
 		});
@@ -135,7 +170,7 @@ var myController = [ "$rootScope", "$scope", "$dialogs", "$modal", "$location", 
 			var item = project.items[i];
 			$scope.todos[item.status].push(item);
 		}
-		$scope.socket = io.connect('http://' + window.document.location.host);
+		$scope.socket = io.connect((location.protocol != 'https:' ? "http" : "https")+'://' + window.document.location.host);
 		$scope.socket.emit('message', {
 			command : 'join',
 			projectKey : $scope.projectKey

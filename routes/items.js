@@ -44,7 +44,7 @@ router.put('/', function(req, res) {
 		}
 	}).success(function(item) {
 		if (null == item) {
-			res.json(error);
+			res.json({message:"item is null"});
 			return;
 		}
 		item.title = requestItem.title;
