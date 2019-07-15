@@ -21,10 +21,7 @@ app.use('/projects', projectController);
 app.use('/items', itemsController);
 
 var execfunc = []
-db.sequelize.sync().complete(function(err) {
-	if (err) {
-		console.log(err);
-	} else {
+db.sequelize.sync().then(() => {
 		var server = http.Server(app);
 		global.io = require('socket.io')(server);
 		global.io.on('connection', socketController);
@@ -34,8 +31,7 @@ db.sequelize.sync().complete(function(err) {
 		execfunc.push(function() {
 			server.close();
 		});
-	}
-});
+	}).catch(error => console.log("error on initialize " + error));
 global.UUID.create = function() {
 	return UUID.v4().split('-').join('');
 }

@@ -5,44 +5,44 @@ var config = require(__dirname + '/../config/config.json')[env];
 var express = require('express');
 var router = express.Router();
 router.post('/', function(req, res) {
-	Project.find({
-		where : [ 'key = ?', req.body.projectKey ]
-	}).success(function(project) {
+	Project.findOne({
+		where : {'key': req.body.projectKey}
+	}).then(function(project) {
 		if (!project) {
 			res.status(404).send();
 			return;
 		}
 		project.increment({
 			itemIncrements : 1
-		}).success(function(project) {
+		}).then(function(project) {
 			Item.create({
 				projectKey : project.key,
 				key : global.UUID.create(),
 				status : req.body.status,
 				index : parseInt(req.body.index),
 				number : project.itemIncrements
-			}).success(function(item) {
+			}).then(function(item) {
 				res.json(item);
-			})["error"](function(error) {
+			}).catch(function(error) {
 				console.log("error = " + error);
 				res.status(500).json(error);
 			});
-		})["error"](function(error) {
+		}).catch(function(error) {
 			console.log("error = " + error);
 			res.status(500).json(error);
 		});
-	})["error"](function(error) {
+	}).catch(function(error) {
 		console.log("error = " + error);
 		res.status(500).json(error);
 	});
 });
 router.put('/', function(req, res) {
 	var requestItem = req.body;
-	Item.find({
+	Item.findOne({
 		where : {
 			key : requestItem.key
 		}
-	}).success(function(item) {
+	}).then(function(item) {
 		if (null == item) {
 			res.json({message:"item is null"});
 			return;
@@ -51,10 +51,10 @@ router.put('/', function(req, res) {
 		item.description = requestItem.description;
 		item.status = parseInt(requestItem.status);
 		item.index = parseInt(requestItem.index);
-		item.save().success(function(item) {
+		item.save().then(function(item) {
 			res.json(item);
 			sendEvent(item.projectKey, "update", item);
-		})["error"](function(error) {
+		}).catch(function(error) {
 			res.json(error);
 		});
 	})
@@ -67,7 +67,7 @@ router.put('/move', function(req, res) {
 			status : movedItem.status
 		},
 		order : [ 'index' ]
-	}).success(function(items) {
+	}).then(function(items) {
 		var index = 0;
 		for ( var i in items) {
 			var sortItem = items[i];
@@ -79,15 +79,15 @@ router.put('/move', function(req, res) {
 			} else {
 			}
 			sortItem.index = index++;
-			sortItem.save().success(function() {
-			})["error"](function(err) {
+			sortItem.save().then(function() {
+			}).catch(function(err) {
 				console.log("err = " + err)
 			});
 		}
 		Item.update(movedItem, {
 			key : movedItem.key
-		}).success(function() {
-		})["error"](function(err) {
+		}).then(function() {
+		}).catch(function(err) {
 			console.log("err = " + err);
 		});
 	});
@@ -103,15 +103,15 @@ router['delete']('/', function(req, res) {
 		var items = [ req.body ]
 	}
 	items.forEach(function(item) {
-		Item.find({
+		Item.findOne({
 			where : {
 				key : item.key
 			}
-		}).success(function(findedItem) {
+		}).then(function(findedItem) {
 			if (null == findedItem) {
 				return;
 			}
-			findedItem.destroy().success(function() {
+			findedItem.destroy().then(function() {
 				if (1 == items.length) {
 					res.json({
 						message : "accepted"

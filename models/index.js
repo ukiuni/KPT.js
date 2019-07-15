@@ -9,11 +9,9 @@ global.db = {
 	Item : sequelize.import(__dirname + '/item'),
 	Snapshot : sequelize.import(__dirname + '/snapshot')
 }
-sequelize.sync().complete(function(error) {
-	if (!error) {
+sequelize.sync().then(() => {
 		console.log("db sync complete");
-	} else {
-		console.log("error occured when db sync " + error);
-	}
-})
+	}).catch(error => {
+		console.log("error occured when db sync " + JSON.stringify(error));
+	});
 module.exports = global.db;
