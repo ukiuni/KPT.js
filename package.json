@@ -22,10 +22,10 @@
     "body-parser": "~1.8.2",
     "express": "~4.9.0",
     "node-uuid": "~1.4.1",
-    "pg": "^4.4.2",
-    "pg-hstore": "^2.3.2",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.3",
     "redis": "^0.12.1",
-    "sequelize": "~1.7.10",
+    "sequelize": "~5.10.1",
     "socket.io": "~1.1.0",
     "sqlite3": "~4.0.0"
   },
